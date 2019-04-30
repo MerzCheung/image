@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.image.mapper.DemoMapper">
+
+    <insert id="add" parameterType="com.example.image.model.RGBModel">
+        insert into rgb(img_name, r, g, b) values (#{name}, #{r}, #{g}, #{b});
+    </insert>
+
+
+    <select id="selectImage" resultType="Map">
+        select img_name, abs(#{r}-r)+abs(#{g}-g)+abs(#{b}-b) su from rgb ORDER BY su
+    </select>
+</mapper>
