@@ -21,12 +21,7 @@ public class DemoController {
     private DemoMapper demoMapper;
 
     @PostMapping("/selectImage")
-    public Object selectImage(Integer r, Integer g, Integer b) {
-        return demoMapper.selectImage(r, g, b);
-    }
-
-    @PostMapping("/addImage")
-    public Object addImage(MultipartFile file) throws IOException {
+    public Object selectImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String prefix=fileName.substring(fileName.lastIndexOf("."));
         final File excelFile = File.createTempFile(getUUID(), prefix);
@@ -36,11 +31,28 @@ public class DemoController {
         ImageUtil.thumbnails(excelFile, toPic);
         // 计算像素值
         int[] imagePixel = ImageUtil.getImagePixel(toPic);
-        RGBModel rgbModel = new RGBModel(fileName, imagePixel[0], imagePixel[1], imagePixel[2]);
         excelFile.delete();
         toPic.delete();
-        Integer rs = demoMapper.add(rgbModel);
-        return rs.equals(1);
+        return demoMapper.selectImage(imagePixel[0], imagePixel[1], imagePixel[2]);
+    }
+
+    @PostMapping("/addImage")
+    public void addImage(MultipartFile[] files) throws IOException {
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            String prefix=fileName.substring(fileName.lastIndexOf("."));
+            final File excelFile = File.createTempFile(getUUID(), prefix);
+            file.transferTo(excelFile);
+            File toPic = new File(getUUID()+".jpg");
+            // 压缩
+            ImageUtil.thumbnails(excelFile, toPic);
+            // 计算像素值
+            int[] imagePixel = ImageUtil.getImagePixel(toPic);
+            RGBModel rgbModel = new RGBModel(fileName, imagePixel[0], imagePixel[1], imagePixel[2]);
+            excelFile.delete();
+            toPic.delete();
+            demoMapper.add(rgbModel);
+        }
     }
 
     private String getUUID() {

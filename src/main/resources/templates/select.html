@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form id="form">
+        <table>
+            <tr>
+                <td>上传文件</td>
+                <td>
+                    <input type="file" name="file"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" id="submit" value="提交" onclick="test();" />
+                    <input type="reset"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div id="result">
+        <!--<div style="width: 200px;height: 200px; margin: 0 50px 50px 0;display: inline-block;">-->
+            <!--<img src="/IoReadImage?imgName=C:/Users/DELL/Desktop/翰联400色色卡_512x300px/renamed_fig/001 001R/H01.jpg" style="width: 100%;height: 100%;">-->
+            <!--<span style="display: inline-block; width: 100%; text-align: center">aaa.jpg</span>-->
+        <!--</div>-->
+        <!--<div style="width: 200px;height: 200px; margin: 0 50px 50px 0;display: inline-block;">-->
+            <!--<img src="/IoReadImage?imgName=C:/Users/DELL/Desktop/翰联400色色卡_512x300px/renamed_fig/001 001R/H01.jpg" style="width: 100%;height: 100%;">-->
+            <!--<span style="display: inline-block; width: 100%; text-align: center">aaa.jpg</span>-->
+        <!--</div>-->
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" th:src="@{https://code.jquery.com/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript">
+    function test() {
+        var form = new FormData(document.getElementById("form"));
+        $.ajax({
+            url: "/demo/selectImage",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                let html = '';
+                data.forEach(function (el) {html += '<div style="width: 200px;height: 200px; margin: 0 50px 50px 0;display: inline-block;">\n' +
+                        '            <img src="/IoReadImage?imgName='+el.img_name+'" style="width: 100%;height: 100%;">\n' +
+                        '            <span style="display: inline-block; width: 100%; text-align: center">'+el.img_name.substring(el.img_name.lastIndexOf('/')+1)+'</span>\n' +
+                        '        </div>';
+                });
+                $("#result").html(html);
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+    }
+</script>
+</html>
