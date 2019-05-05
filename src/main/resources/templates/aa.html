@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            overflow: hidden;
+        }
+        .webdesigntuts-workshop span{
+            font-size: 16px!important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="1920" height="1080"> 您的浏览器不支持canvas标签，请您更换浏览器 </canvas>
+<script src="../static/js/word.js" th:src="@{/js/word.js}"></script>
+</body>
+</html>
